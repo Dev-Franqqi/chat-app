@@ -1,8 +1,14 @@
-import { createServer } from "http";
+import express from "express"
 import { Server } from "socket.io";
 
-const httpServer = createServer();
-const io = new Server(httpServer, {
+const app = express()
+ const port  = process.env.PORT || 3500
+app.use(express.static("public"))
+const expressServer = app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
+
+const io = new Server(expressServer, {
   cors: {
     origin:process.env.NODE_ENV === "production"
         ? false
@@ -20,6 +26,3 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(3500, () => {
-    console.log("Listening on port 3500")
-})
